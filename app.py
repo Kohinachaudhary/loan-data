@@ -4,8 +4,12 @@ import numpy as np
 import joblib
 
 # Load model and scaler
-model = joblib.load("model.pkl")
-scaler = joblib.load("scaler.pkl")
+try:
+    model = joblib.load("model.pkl")
+    scaler = joblib.load("scaler.pkl")
+except FileNotFoundError:
+    st.error("Model or scaler file not found. Please check your repository.")
+    st.stop()
 
 # App title
 st.title("🏦 Loan Default Prediction App")
@@ -17,10 +21,13 @@ married = st.selectbox("Married", ["Yes", "No"])
 dependents = st.selectbox("Dependents", ["0", "1", "2", "3+"])
 education = st.selectbox("Education", ["Graduate", "Not Graduate"])
 self_employed = st.selectbox("Self Employed", ["Yes", "No"])
-applicant_income = st.number_input("Applicant Income", min_value=0)
-coapplicant_income = st.number_input("Coapplicant Income", min_value=0)
-loan_amount = st.number_input("Loan Amount (in thousands)", min_value=0)
-loan_amount_term = st.number_input("Loan Amount Term (in months)", min_value=0)
+
+# Sliders for numeric inputs
+applicant_income = st.slider("Applicant Income", min_value=0, max_value=100000, value=5000, step=500)
+coapplicant_income = st.slider("Coapplicant Income", min_value=0, max_value=50000, value=2000, step=500)
+loan_amount = st.slider("Loan Amount (in thousands)", min_value=0, max_value=700, value=120, step=10)
+loan_amount_term = st.slider("Loan Amount Term (in months)", min_value=12, max_value=480, value=360, step=12)
+
 credit_history = st.selectbox("Credit History", ["Good (1)", "Bad (0)"])
 property_area = st.selectbox("Property Area", ["Urban", "Semiurban", "Rural"])
 
