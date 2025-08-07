@@ -86,3 +86,52 @@ if st.button("Predict Loan Default"):
         "Value": [gender, married, dependents, education, self_employed, applicant_income,
                   coapplicant_income, loan_amount, loan_amount_term, credit_history_label, property_area_label]
     }))
+
+from fpdf import FPDF
+import base64
+
+# Generate and download PDF report
+st.subheader("📄 Download Prediction Report")
+
+# Create PDF content
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+pdf.cell(200, 10, txt="Loan Default Prediction Report", ln=True, align="C")
+pdf.ln(10)
+
+pdf.cell(200, 10, txt=f"Prediction: {'High Risk - Likely to Default' if prediction[0] == 1 else 'Low Risk - Likely to be Approved'}", ln=True)
+if prob is not None:
+    pdf.cell(200, 10, txt=f"Probability of Default: {prob:.2%}", ln=True)
+pdf.ln(5)
+
+pdf.cell(200, 10, txt="Applicant Details:", ln=True)
+pdf.ln(5)
+
+input_fields = {
+    "Gender": gender,
+    "Married": married,
+    "Dependents": dependents,
+    "Education": education,
+    "Self Employed": self_employed,
+    "Applicant Income": applicant_income,
+    "Coapplicant Income": coapplicant_income,
+    "Loan Amount": loan_amount,
+    "Loan Term": loan_amount_term,
+    "Credit History": credit_history_label,
+    "Property Area": property_area_label
+}
+
+for key, value in input_fields.items():
+    pdf.cell(200, 10, txt=f"{key}: {value}", ln=True)
+
+# Save PDF to memory
+pdf_output = "loan_prediction_report.pdf"
+pdf.output(pdf_output)
+
+# Read file and encode it
+with open(pdf_output, "rb") as f:
+    base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+
+pdf_download_link = f'<a href="data:application/octet-stream;base64,{base64_pdf}" download="{pdf_output}">📥 Download Report as PDF</a>'
+st.markdown(pdf_download_link, unsafe_allow_html=True)
