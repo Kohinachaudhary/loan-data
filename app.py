@@ -140,3 +140,28 @@ if st.button("Predict Loan Default"):
 
     download_link = f'<a href="data:application/pdf;base64,{base64_pdf}" download="Loan_Prediction_Report.pdf">📥 Download Report as PDF</a>'
     st.markdown(download_link, unsafe_allow_html=True)
+
+import streamlit as st
+import base64
+
+# Set background image
+def set_bg(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded = base64.b64encode(image_file.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Call function with your image path
+set_bg("background.jpg")  # Change this to your actual image filename (must be in your app directory)
