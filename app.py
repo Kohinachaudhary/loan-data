@@ -9,7 +9,7 @@ background_image_url = "https://raw.githubusercontent.com/Kohinachaudhary/loan-d
 page_bg_img = f"""
 <style>
 [data-testid="stAppViewContainer"] {{
-    background-image: url("{background_image_url}");
+    background-image: url("image.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -170,6 +170,7 @@ if st.button("Predict Loan Default"):
 
     download_link = f'<a href="data:application/pdf;base64,{base64_pdf}" download="Loan_Prediction_Report.pdf">📥 Download Report as PDF</a>'
     st.markdown(download_link, unsafe_allow_html=True)
+
 
 
 
