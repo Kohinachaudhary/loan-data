@@ -12,6 +12,21 @@ except FileNotFoundError:
     st.error("Model or scaler file not found. Please check your repository.")
     st.stop()
 
+# Set background image
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("https://static.vecteezy.com/system/resources/previews/024/269/311/non_2x/car-house-personal-money-loan-concept-finance-business-icon-on-wooden-cube-saving-money-for-a-car-money-and-house-wooden-cubes-with-word-loan-copy-space-for-text-loan-payment-car-and-house-photo.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # App title
 st.title("🏦 Loan Default Prediction App")
 st.write("Enter applicant details to predict loan default risk.")
@@ -140,12 +155,3 @@ if st.button("Predict Loan Default"):
 
     download_link = f'<a href="data:application/pdf;base64,{base64_pdf}" download="Loan_Prediction_Report.pdf">📥 Download Report as PDF</a>'
     st.markdown(download_link, unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
