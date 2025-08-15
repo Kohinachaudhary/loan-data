@@ -168,9 +168,8 @@ page_bg_img = f"""
     padding: 1rem;
 }}
 </style>
-"""
 
-st.markdown(page_bg_img, unsafe_allow_html=True)
+
 
 
 
