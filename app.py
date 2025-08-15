@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 import joblib
 import matplotlib.pyplot as plt
-from fpdf import FPDF
-import base64
 
 # Load model and scaler
 try:
@@ -82,24 +80,20 @@ if st.button("Predict Loan Default"):
         st.info(f"🔍 Probability of Default: **{prob:.2%}**")
 
     # ---------------- Charts ---------------- #
-    st.sidebar.subheader("📊 Charts and Graphs")
 
-    # Income Distribution
-    st.sidebar.subheader("Income Distribution")
-    st.sidebar.bar_chart({
+    st.subheader("📊 Income Distribution")
+    st.bar_chart({
         'Income': [applicant_income, coapplicant_income]
     }, use_container_width=True)
 
-    # Credit History Pie Chart
-    st.sidebar.subheader("Credit History Pie Chart")
+    st.subheader("📈 Credit History Pie Chart")
     labels = ['Good Credit', 'Bad Credit']
     sizes = [credit_history, 1 - credit_history]
     fig1, ax1 = plt.subplots()
     ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=["#4CAF50", "#F44336"])
     ax1.axis('equal')
-    st.sidebar.pyplot(fig1)
+    st.pyplot(fig1)
 
-    # ---------------- Input Summary ---------------- #
     st.subheader("🧾 Input Summary")
     st.table(pd.DataFrame({
         "Feature": ["Gender", "Married", "Dependents", "Education", "Self Employed", "Applicant Income",
@@ -109,6 +103,10 @@ if st.button("Predict Loan Default"):
     }))
 
     # ---------------- PDF Download ---------------- #
+    from fpdf import FPDF
+    import base64
+    import os
+
     st.subheader("📄 Download Prediction Report")
 
     # Create PDF
