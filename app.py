@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import joblib
 import matplotlib.pyplot as plt
+from fpdf import FPDF
+import base64
 
 # Load model and scaler
 try:
@@ -80,33 +82,32 @@ if st.button("Predict Loan Default"):
         st.info(f"🔍 Probability of Default: **{prob:.2%}**")
 
     # ---------------- Charts ---------------- #
+    col1, col2 = st.columns([2, 1])  # Create two columns
 
-    st.subheader("📊 Income Distribution")
-    st.bar_chart({
-        'Income': [applicant_income, coapplicant_income]
-    }, use_container_width=True)
+    with col1:
+        st.subheader("🧾 Input Summary")
+        st.table(pd.DataFrame({
+            "Feature": ["Gender", "Married", "Dependents", "Education", "Self Employed", "Applicant Income",
+                        "Coapplicant Income", "Loan Amount", "Loan Term", "Credit History", "Property Area"],
+            "Value": [gender, married, dependents, education, self_employed, applicant_income,
+                      coapplicant_income, loan_amount, loan_amount_term, credit_history_label, property_area_label]
+        }))
 
-    st.subheader("📈 Credit History Pie Chart")
-    labels = ['Good Credit', 'Bad Credit']
-    sizes = [credit_history, 1 - credit_history]
-    fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=["#4CAF50", "#F44336"])
-    ax1.axis('equal')
-    st.pyplot(fig1)
+    with col2:
+        st.subheader("📊 Income Distribution")
+        st.bar_chart({
+            'Income': [applicant_income, coapplicant_income]
+        }, use_container_width=True)
 
-    st.subheader("🧾 Input Summary")
-    st.table(pd.DataFrame({
-        "Feature": ["Gender", "Married", "Dependents", "Education", "Self Employed", "Applicant Income",
-                    "Coapplicant Income", "Loan Amount", "Loan Term", "Credit History", "Property Area"],
-        "Value": [gender, married, dependents, education, self_employed, applicant_income,
-                  coapplicant_income, loan_amount, loan_amount_term, credit_history_label, property_area_label]
-    }))
+        st.subheader("📈 Credit History Pie Chart")
+        labels = ['Good Credit', 'Bad Credit']
+        sizes = [credit_history, 1 - credit_history]
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=["#4CAF50", "#F44336"])
+        ax1.axis('equal')
+        st.pyplot(fig1)
 
     # ---------------- PDF Download ---------------- #
-    from fpdf import FPDF
-    import base64
-    import os
-
     st.subheader("📄 Download Prediction Report")
 
     # Create PDF
